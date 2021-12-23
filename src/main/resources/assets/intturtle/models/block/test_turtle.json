@@ -1,0 +1,6 @@
+{
+  "parent": "intturtle:block/int_turtle",
+  "textures": {
+    "turtle": "intturtle:block/test_turtle"
+  }
+}

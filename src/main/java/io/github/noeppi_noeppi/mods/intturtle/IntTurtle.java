@@ -2,6 +2,8 @@ package io.github.noeppi_noeppi.mods.intturtle;
 
 import io.github.noeppi_noeppi.libx.mod.registration.ModXRegistration;
 import io.github.noeppi_noeppi.libx.mod.registration.RegistrationBuilder;
+import io.github.noeppi_noeppi.mods.intturtle.dot.DotManager;
+import io.github.noeppi_noeppi.mods.intturtle.dot.objects.DynamicString;
 import io.github.noeppi_noeppi.mods.intturtle.network.IntTurtleNetwork;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.fml.common.Mod;
@@ -40,11 +42,11 @@ public final class IntTurtle extends ModXRegistration {
 
     @Override
     protected void setup(FMLCommonSetupEvent event) {
-        
+        DotManager.register(this.resource("string"), DynamicString.class, DynamicString.Serializer.INSTANCE);
     }
 
     @Override
     protected void clientSetup(FMLClientSetupEvent event) {
-        
+        //
     }
 }

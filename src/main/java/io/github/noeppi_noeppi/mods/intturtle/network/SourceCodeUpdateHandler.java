@@ -1,7 +1,7 @@
 package io.github.noeppi_noeppi.mods.intturtle.network;
 
 import io.github.noeppi_noeppi.mods.intturtle.ModItems;
-import io.github.noeppi_noeppi.mods.intturtle.content.source.ItemSourceCode;
+import io.github.noeppi_noeppi.mods.intturtle.content.source.SourceCodeItem;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +17,7 @@ public class SourceCodeUpdateHandler {
             if (player != null) {
                 ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
                 if (!stack.isEmpty() && stack.getItem() == ModItems.sourceCode) {
-                    ItemSourceCode.setMemory(stack, msg.memory());
+                    SourceCodeItem.setMemory(stack, msg.memory());
                 }
             }
         });

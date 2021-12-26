@@ -15,9 +15,9 @@ import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 
-public class ItemSourceCode extends ItemBase {
+public class SourceCodeItem extends ItemBase {
 
-    public ItemSourceCode(ModX mod, Properties properties) {
+    public SourceCodeItem(ModX mod, Properties properties) {
         super(mod, properties.stacksTo(1));
     }
     

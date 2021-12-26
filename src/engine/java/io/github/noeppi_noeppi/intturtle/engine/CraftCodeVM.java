@@ -39,28 +39,41 @@ public class CraftCodeVM {
         this.exited = exited;
         this.memory = memory;
     }
+
+    public boolean exited() {
+        return exited;
+    }
     
+    public void forceExit() {
+        exited = true;
+    }
+
     public void step() throws IntCodeException {
         if (this.exited) return;
-        long opcode = this.memory.get(this.instruction);
-        if (opcode < 0) throw new IntCodeException("Negative instruction: " + opcode, this.instruction);
-        int oldInst = this.instruction;
-        int advance = switch ((int) (opcode % 100)) {
-            case 1 -> { write(opcode, 3, read(opcode, 2) + read(opcode, 2)); yield 3; }
-            case 2 -> { write(opcode, 3, read(opcode, 2) * read(opcode, 2)); yield 3; }
-            case 3 -> { if (this.iface.canRead()) { write(opcode, 1, this.iface.read()); yield 3; } else { yield 0; } }
-            case 4 -> { this.iface.write(this.read(opcode, 1)); yield 1; }
-            case 5 -> { if (read(opcode, 1) != 0) { this.instruction = memVal(read(opcode, 2), "Jump out of memory"); } yield 2; }
-            case 6 -> { if (read(opcode, 1) == 0) { this.instruction = memVal(read(opcode, 2), "Jump out of memory"); } yield 2; }
-            case 7 -> { write(opcode, 3, (read(opcode, 2) < read(opcode, 2)) ? 1 : 0); yield 3; }
-            case 8 -> { write(opcode, 3, (read(opcode, 2) == read(opcode, 2)) ? 1 : 0); yield 3; }
-            case 9 -> { this.relative += intVal(read(opcode, 1), "Relative overflow"); yield 1; }
-            case 10 -> { long call = read(opcode, 1); if (this.iface.canInvoke(call, this.memory)) { this.iface.invoke(call, this.memory); yield 1; } else { yield 0; } }
-            case 99 -> { this.exited = true; yield 0; }
-            default -> throw new IntCodeException("Unknown instruction: " + opcode, this.instruction);
-        };
-        if (this.instruction == oldInst) {
-            this.instruction += advance;
+        try {
+            long opcode = this.memory.get(this.instruction);
+            if (opcode < 0) throw new IntCodeException("Negative instruction: " + opcode, this.instruction);
+            int oldInst = this.instruction;
+            int advance = switch ((int) (opcode % 100)) {
+                case 1 -> { write(opcode, 3, read(opcode, 2) + read(opcode, 2)); yield 3; }
+                case 2 -> { write(opcode, 3, read(opcode, 2) * read(opcode, 2)); yield 3; }
+                case 3 -> { if (this.iface.canRead()) { write(opcode, 1, this.iface.read()); yield 3; } else { yield 0; } }
+                case 4 -> { this.iface.write(this.read(opcode, 1)); yield 1; }
+                case 5 -> { if (read(opcode, 1) != 0) { this.instruction = memVal(read(opcode, 2), "Jump out of memory"); } yield 2; }
+                case 6 -> { if (read(opcode, 1) == 0) { this.instruction = memVal(read(opcode, 2), "Jump out of memory"); } yield 2; }
+                case 7 -> { write(opcode, 3, (read(opcode, 2) < read(opcode, 2)) ? 1 : 0); yield 3; }
+                case 8 -> { write(opcode, 3, (read(opcode, 2) == read(opcode, 2)) ? 1 : 0); yield 3; }
+                case 9 -> { this.relative += intVal(read(opcode, 1), "Relative overflow"); yield 1; }
+                case 10 -> { long call = read(opcode, 1); if (this.iface.canInvoke(call, this.memory)) { this.iface.invoke(call, this.memory); yield 1; } else { yield 0; } }
+                case 99 -> { this.exited = true; yield 0; }
+                default -> throw new IntCodeException("Unknown instruction: " + opcode, this.instruction);
+            };
+            if (this.instruction == oldInst) {
+                this.instruction += advance;
+            }
+        } catch (IntCodeException e) {
+            if (e.at != Long.MIN_VALUE) throw e;
+            throw new IntCodeException(e, this.instruction);
         }
     }
     

@@ -2,11 +2,11 @@ package io.github.noeppi_noeppi.intturtle.engine;
 
 public interface CraftCodeInterface {
 
-    void write(long value);
+    void write(long value) throws IntCodeException;
 
-    boolean canRead();
-    long read();
+    boolean canRead() throws IntCodeException;
+    long read() throws IntCodeException;
 
-    boolean canInvoke(long call, Memory memory);
-    void invoke(long call, Memory memory);
+    boolean canInvoke(long call, Memory memory) throws IntCodeException;
+    void invoke(long call, Memory memory) throws IntCodeException;
 }

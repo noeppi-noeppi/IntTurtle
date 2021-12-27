@@ -7,6 +7,9 @@ import java.util.Map;
 
 public class SystemCalls {
     
+    public static final int API = 1;
+    public static final String VERSION = "IntTurtle API " + API;
+    
     private static final Map<Integer, SystemCall> sysCalls = new HashMap<>();
 
     public static synchronized void register(int id, SystemCall call) {

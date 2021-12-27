@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 public class DynamicString extends DynamicObject<String, String> {
 
-    protected DynamicString(String value) {
+    public DynamicString(String value) {
         super(value, String.class);
     }
 

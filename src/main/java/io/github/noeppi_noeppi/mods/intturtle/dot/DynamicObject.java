@@ -24,7 +24,7 @@ public abstract class DynamicObject<S, T> {
     protected final S value;
     protected final Class<T> targetClass;
 
-    protected DynamicObject(S value, Class<T> targetClass) {
+    public DynamicObject(S value, Class<T> targetClass) {
         this.value = value;
         this.targetClass = targetClass;
     }

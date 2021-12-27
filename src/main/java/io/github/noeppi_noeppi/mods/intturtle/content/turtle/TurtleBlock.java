@@ -2,7 +2,7 @@ package io.github.noeppi_noeppi.mods.intturtle.content.turtle;
 
 import io.github.noeppi_noeppi.libx.base.tile.BlockBE;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.mods.intturtle.ModItems;
+import io.github.noeppi_noeppi.mods.intturtle.ModComponents;
 import io.github.noeppi_noeppi.mods.intturtle.content.source.SourceCodeItem;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -27,15 +27,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class TurtleBlock extends BlockBE<Turtle> {
 
-    private final int instructionsPerTick;
+    public final int instructionsPerTick;
 
     public TurtleBlock(ModX mod, int instructionsPerTick) {
-        super(mod, Turtle.class, Properties.copy(Blocks.IRON_BLOCK));
+        super(mod, Turtle.class, Properties.copy(Blocks.IRON_BLOCK).noOcclusion());
         this.instructionsPerTick = instructionsPerTick;
     }
 
@@ -55,16 +54,6 @@ public class TurtleBlock extends BlockBE<Turtle> {
         return this.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
     }
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
-        BlockEntity be = super.newBlockEntity(pos, state);
-        if (be instanceof Turtle turtle) {
-            turtle.setInstructionsPerTick(this.instructionsPerTick);
-        }
-        return be;
-    }
-
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
@@ -78,7 +67,7 @@ public class TurtleBlock extends BlockBE<Turtle> {
     public InteractionResult use(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Player player, @Nonnull InteractionHand hand, @Nonnull BlockHitResult hit) {
         ItemStack stack = player.getItemInHand(hand);
         if (!level.isClientSide) {
-            if (stack.getItem() == ModItems.sourceCode) {
+            if (stack.getItem() == ModComponents.sourceCode) {
                 BlockEntity be = level.getBlockEntity(pos);
                 if (be instanceof Turtle turtle && SourceCodeItem.hasMemory(stack)) {
                     turtle.startProgram(SourceCodeItem.getMemory(stack));

@@ -2,11 +2,13 @@ package io.github.noeppi_noeppi.mods.intturtle.content.turtle;
 
 import io.github.noeppi_noeppi.libx.base.tile.BlockEntityBase;
 import io.github.noeppi_noeppi.libx.base.tile.TickableBlock;
+import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
+import io.github.noeppi_noeppi.mods.intturtle.syscall.movement.ScMove;
+import io.github.noeppi_noeppi.mods.intturtle.syscall.movement.ScTurn;
 import io.github.noeppi_noeppi.mods.intturtle.util.MovingDirection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -17,12 +19,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class Turtle extends BlockEntityBase implements TickableBlock {
-
-    public static final int TURN_DURATION = 4;
-    public static final int MOVE_DURATION = 8;
     
-    @Nullable
-    private TurtleExecutor executor = null;
+    private final TurtleExecutor executor;
+    
+    private final BaseItemStackHandler inventory = BaseItemStackHandler.builder(2)
+            .contentsChanged(() -> {
+                this.setChanged();
+                this.setDispatchable();
+            }).build();
     
     @Nullable
     private String status = null;
@@ -41,18 +45,15 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
     
     public Turtle(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-    }
-
-    public void setInstructionsPerTick(int instructionsPerTick) {
+        int instructionsPerTick = 1;
+        if (state.getBlock() instanceof TurtleBlock turtleBlock) instructionsPerTick = turtleBlock.instructionsPerTick;
         this.executor = new TurtleExecutor(this, instructionsPerTick);
     }
 
     public void startProgram(long[] memory) {
-        if (this.executor != null) {
-            this.status = null;
-            this.executor.start(memory);
-            this.setChanged();
-        }
+        this.status = null;
+        this.executor.start(memory);
+        this.setChanged();
     }
     
     @Override
@@ -65,7 +66,7 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
         }
         if (this.lastDir != facing()) {
             this.turningTicks += 1;
-            if (this.turningTicks >= TURN_DURATION) {
+            if (this.turningTicks >= ScTurn.TURN_DURATION) {
                 this.lastDir = facing();
                 this.turningTicks = 0;
             }
@@ -74,14 +75,14 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
         }
         if (this.moveDir != MovingDirection.NONE) {
             this.movingTicks += 1;
-            if (this.movingTicks >= MOVE_DURATION) {
+            if (this.movingTicks >= ScMove.MOVE_DURATION) {
                 this.moveDir = MovingDirection.NONE;
                 this.movingTicks = 0;
             }
             this.setChanged();
             this.setDispatchable();
         }
-        if (this.level != null && !this.level.isClientSide && this.executor != null) {
+        if (this.level != null && !this.level.isClientSide) {
             this.scheduledMove = null;
             this.executor.tick(str -> this.status = str);
             if (this.scheduledMove != null) {
@@ -146,12 +147,43 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
             return false;
         }
     }
+    
+    public BlockPos targetPos(MovingDirection dir) {
+        return dir.target(this.worldPosition, this.facing());
+    }
+    
+    public boolean canReach(BlockPos pos) {
+        if (this.worldPosition.equals(pos)) {
+            return true;
+        } else if (this.worldPosition.getX() == pos.getX() && this.worldPosition.getZ() == pos.getZ()) {
+            return Math.abs(this.worldPosition.getY() - pos.getY()) <= 1;
+        } else {
+            return this.worldPosition.relative(this.facing()).equals(pos);
+        }
+    }
+    
+    public boolean canReach(BlockPos pos, Direction face) {
+        if (this.worldPosition.equals(pos)) {
+            return true;
+        } else if (this.worldPosition.getX() == pos.getX() && this.worldPosition.getZ() == pos.getZ()) {
+            if (this.worldPosition.getY() + 1 == pos.getY()) {
+                return face == Direction.DOWN;
+            } else if (this.worldPosition.getY() - 1 == pos.getY()) {
+                return face == Direction.UP;
+            } else {
+                return false;
+            }
+        } else {
+            return this.worldPosition.relative(this.facing()).equals(pos) && face == this.facing().getOpposite();
+        }
+    }
 
     private void addClientValues(CompoundTag nbt) {
         if (this.lastDir != null) nbt.putInt("LastDir", this.lastDir.get2DDataValue());
         nbt.putInt("TurningTicks", this.turningTicks);
-        nbt.putInt("MoveDir", this.lastDir.ordinal());
+        nbt.putInt("MoveDir", this.moveDir.ordinal());
         nbt.putInt("MovingTicks", this.movingTicks);
+        nbt.put("Inventory", this.inventory.serializeNBT());
     }
     
     private void loadClientValues(CompoundTag nbt) {
@@ -159,21 +191,21 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
         this.turningTicks = nbt.getInt("TurningTicks");
         this.moveDir = MovingDirection.values()[nbt.getInt("MoveDir")];
         this.movingTicks = nbt.getInt("MovingTicks");
+        this.inventory.deserializeNBT(nbt.getCompound("Inventory"));
     }
     
-    @Nonnull
     @Override
-    public CompoundTag save(@Nonnull CompoundTag nbt) {
-        if (this.executor != null) nbt.put("Executor", this.executor.save());
+    public void saveAdditional(@Nonnull CompoundTag nbt) {
+        super.saveAdditional(nbt);
+        nbt.put("Executor", this.executor.save());
         nbt.putString("Status", this.status == null ? "" : this.status);
         this.addClientValues(nbt);
-        return super.save(nbt);
     }
 
     @Override
     public void load(@Nonnull CompoundTag nbt) {
         super.load(nbt);
-        if (this.executor != null) this.executor.load(nbt.getCompound("Executor"));
+        this.executor.load(nbt.getCompound("Executor"));
         String statusStr = nbt.getString("Status");
         this.status = statusStr.isEmpty() ? null : this.status;
         this.loadClientValues(nbt);
@@ -202,6 +234,10 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
     @Nullable
     public String getStatus() {
         return status;
+    }
+
+    public BaseItemStackHandler getInventory() {
+        return inventory;
     }
 
     @Nullable

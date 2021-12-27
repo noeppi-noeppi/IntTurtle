@@ -26,4 +26,14 @@ public enum MovingDirection {
             case DOWN -> pos.immutable().below();
         };
     }
+    
+    public static MovingDirection targetFromMemory(long value) {
+        if (value == 1) {
+            return MovingDirection.UP;
+        } else if (value == 2) {
+            return MovingDirection.DOWN;
+        } else {
+            return MovingDirection.FORWARD;
+        }
+    }
 }

@@ -31,3 +31,33 @@ dependencies {
     implementation sourceSets.engine.output
     implementation fg.deobf('io.github.noeppi_noeppi.mods:LibX:1.18.1-3.1.0')
 }
+
+minecraft {
+    runs {
+        client {
+            mods {
+                "${project.modid}" {
+                    source sourceSets.engine
+                }
+            }
+        }
+        server {
+            mods {
+                "${project.modid}" {
+                    source sourceSets.engine
+                }
+            }
+        }
+        data {
+            mods {
+                "${project.modid}" {
+                    source sourceSets.engine
+                }
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    tasks.getByPath(":prepareRuns").dependsOn(compileEngineJava)
+}

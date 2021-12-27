@@ -4,7 +4,7 @@ import io.github.noeppi_noeppi.libx.annotation.data.Datagen;
 import io.github.noeppi_noeppi.libx.data.provider.recipe.RecipeProviderBase;
 import io.github.noeppi_noeppi.libx.data.provider.recipe.crafting.CraftingExtension;
 import io.github.noeppi_noeppi.libx.mod.ModX;
-import io.github.noeppi_noeppi.mods.intturtle.ModItems;
+import io.github.noeppi_noeppi.mods.intturtle.ModComponents;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
@@ -18,6 +18,6 @@ public class RecipeProvider extends RecipeProviderBase implements CraftingExtens
 
     @Override
     protected void setup() {
-        this.shapeless(ModItems.sourceCode, Items.PAPER, Tags.Items.DYES_BLUE);
+        this.shapeless(ModComponents.sourceCode, Items.PAPER, Tags.Items.DYES_BLUE);
     }
 }

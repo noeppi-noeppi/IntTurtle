@@ -1,6 +1,7 @@
 package io.github.noeppi_noeppi.mods.intturtle.dot;
 
 import io.github.noeppi_noeppi.mods.intturtle.content.turtle.Turtle;
+import io.github.noeppi_noeppi.mods.intturtle.dot.objects.DynamicString;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -22,7 +23,46 @@ public class DynamicObjects {
         this.turtle = turtle;
     }
 
+    public DynamicObject<?, ?> get() {
+        return this.registerX;
+    }
+    
     @Nullable
+    public DynamicObject<?, ?> getA() {
+        return this.registerA;
+    }
+
+    @Nullable
+    public DynamicObject<?, ?> getB() {
+        return this.registerB;
+    }
+    
+    @Nullable
+    public DynamicObject<?, ?> get(int id) {
+        DynamicObject<?, ?> result = this.storageMap.get(id);
+        return result == null ? DynamicObject.EMPTY : result;
+    }
+
+    public <T> T get(Class<T> cls, T dfl) {
+        T value = this.get(cls);
+        return value == null ? dfl : value;
+    }
+
+    public <T> T getA(Class<T> cls, T dfl) {
+        T value = this.getA(cls);
+        return value == null ? dfl : value;
+    }
+
+    public <T> T getB(Class<T> cls, T dfl) {
+        T value = this.getB(cls);
+        return value == null ? dfl : value;
+    }
+
+    public <T> T get(int id, Class<T> cls, T dfl) {
+        T value = this.get(id, cls);
+        return value == null ? dfl : value;
+    }
+    
     public <T> T get(Class<T> cls) {
         return this.get(this.registerX, cls);
     }
@@ -51,6 +91,22 @@ public class DynamicObjects {
             return (T) obj.get(turtle, serverLevel);
         }
         return null;
+    }
+
+    public void set(String string) {
+        this.set(new DynamicString(string));
+    }
+
+    public void setA(String string) {
+        this.setA(new DynamicString(string));
+    }
+    
+    public void setB(String string) {
+        this.setB(new DynamicString(string));
+    }
+    
+    public long allocate(String string) {
+        return this.allocate(new DynamicString(string));
     }
     
     public void set(DynamicObject<?, ?> obj) {

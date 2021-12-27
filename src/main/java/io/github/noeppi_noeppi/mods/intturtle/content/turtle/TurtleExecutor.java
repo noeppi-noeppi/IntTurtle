@@ -82,7 +82,7 @@ public class TurtleExecutor implements CraftCodeInterface {
     
     public void load(CompoundTag nbt) {
         this.vm = nbt.contains("VM") ? this.vmCodec.decode(NbtOps.INSTANCE, nbt.get("VM")).getOrThrow(false, err -> {}).getFirst() : new CraftCodeVM(this, new Memory(new long[]{ 99 }));
-        this.dot.load(nbt);
+        this.dot.load(nbt.getCompound("Dot"));
         this.blockingTicks = nbt.getInt("Blocking");
         this.currentChatline = new StringBuilder().append(nbt.getString("Chat"));
     }

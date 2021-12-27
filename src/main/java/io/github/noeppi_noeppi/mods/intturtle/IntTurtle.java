@@ -5,6 +5,7 @@ import io.github.noeppi_noeppi.libx.mod.registration.RegistrationBuilder;
 import io.github.noeppi_noeppi.mods.intturtle.dot.DotManager;
 import io.github.noeppi_noeppi.mods.intturtle.dot.DynamicObjects;
 import io.github.noeppi_noeppi.mods.intturtle.dot.objects.DynamicItemHandler;
+import io.github.noeppi_noeppi.mods.intturtle.dot.objects.DynamicNBT;
 import io.github.noeppi_noeppi.mods.intturtle.dot.objects.DynamicString;
 import io.github.noeppi_noeppi.mods.intturtle.network.IntTurtleNetwork;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.SystemCalls;
@@ -15,6 +16,7 @@ import io.github.noeppi_noeppi.mods.intturtle.syscall.dot.*;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.inventory.*;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.movement.ScMove;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.movement.ScTurn;
+import io.github.noeppi_noeppi.mods.intturtle.syscall.nbt.*;
 import io.github.noeppi_noeppi.mods.intturtle.util.MovingDirection;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.fml.common.Mod;
@@ -54,6 +56,7 @@ public final class IntTurtle extends ModXRegistration {
     @Override
     protected void setup(FMLCommonSetupEvent event) {
         DotManager.register(this.resource("string"), DynamicString.class, DynamicString.Serializer.INSTANCE);
+        DotManager.register(this.resource("nbt"), DynamicNBT.class, DynamicNBT.Serializer.INSTANCE);
         DotManager.register(this.resource("item_handler"), DynamicItemHandler.class, DynamicItemHandler.Serializer.INSTANCE);
         
         // Base
@@ -97,6 +100,17 @@ public final class IntTurtle extends ModXRegistration {
         SystemCalls.register(303, new ScExtract());
         SystemCalls.register(304, new ScInsert());
         SystemCalls.register(305, new ScItemInfo());
+        SystemCalls.register(306, new ScItemTag());
+        
+        // NBT
+        SystemCalls.register(400, new ScTagType());
+        SystemCalls.register(401, new ScCountPath());
+        SystemCalls.register(402, new ScFromPath());
+        SystemCalls.register(403, new ScTagToString());
+        SystemCalls.register(404, new ScTagToInt());
+        SystemCalls.register(405, new ScTagElementType());
+        SystemCalls.register(406, new ScTagByKey());
+        SystemCalls.register(407, new ScTagByIndex());
     }
 
     @Override

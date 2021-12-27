@@ -73,18 +73,21 @@ public final class IntTurtle extends ModXRegistration {
         SystemCalls.register(105, new ScAllocate(DynamicObjects::get, 0));
         SystemCalls.register(106, new ScAllocate(DynamicObjects::getA, 1));
         SystemCalls.register(107, new ScAllocate(DynamicObjects::getB, 2));
-        SystemCalls.register(108, new ScFree());
-        SystemCalls.register(109, new ScLoadStringNull());
-        SystemCalls.register(110, new ScLoadStringLen());
-        SystemCalls.register(111, new ScStoreStringNull());
-        SystemCalls.register(112, new ScStoreStringLen());
-        SystemCalls.register(113, new ScCompareStringNull(dot -> dot.get(String.class), 0));
-        SystemCalls.register(114, new ScCompareStringLen(dot -> dot.get(String.class), 0));
-        SystemCalls.register(115, new ScCompareStringNull(dot -> dot.getA(String.class), 1));
-        SystemCalls.register(116, new ScCompareStringLen(dot -> dot.getA(String.class), 1));
-        SystemCalls.register(117, new ScCompareStringNull(dot -> dot.getB(String.class), 2));
-        SystemCalls.register(118, new ScCompareStringLen(dot -> dot.getB(String.class), 2));
-        SystemCalls.register(119, new ScParseResource());
+        SystemCalls.register(108, new ScLoad(0, DynamicObjects::set));
+        SystemCalls.register(109, new ScLoad(1, DynamicObjects::setA));
+        SystemCalls.register(110, new ScLoad(2, DynamicObjects::setB));
+        SystemCalls.register(111, new ScFree());
+        SystemCalls.register(112, new ScLoadStringNull());
+        SystemCalls.register(113, new ScLoadStringLen());
+        SystemCalls.register(114, new ScStoreStringNull());
+        SystemCalls.register(115, new ScStoreStringLen());
+        SystemCalls.register(116, new ScCompareStringNull(dot -> dot.get(String.class), 0));
+        SystemCalls.register(117, new ScCompareStringLen(dot -> dot.get(String.class), 0));
+        SystemCalls.register(118, new ScCompareStringNull(dot -> dot.getA(String.class), 1));
+        SystemCalls.register(119, new ScCompareStringLen(dot -> dot.getA(String.class), 1));
+        SystemCalls.register(120, new ScCompareStringNull(dot -> dot.getB(String.class), 2));
+        SystemCalls.register(121, new ScCompareStringLen(dot -> dot.getB(String.class), 2));
+        SystemCalls.register(122, new ScParseResource());
         
         // Movement
         SystemCalls.register(200, new ScMove(MovingDirection.FORWARD));

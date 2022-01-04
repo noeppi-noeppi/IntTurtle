@@ -1,0 +1,67 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "intturtle:basic_circuit"
+    ]
+  },
+  "criteria": {
+    "criterion0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dusts/redstone"
+          }
+        ]
+      }
+    },
+    "criterion1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:redstone_torch"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:gems/quartz"
+          }
+        ]
+      }
+    },
+    "criterion3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/gold"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "intturtle:basic_circuit"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "criterion0",
+      "criterion1",
+      "criterion2",
+      "criterion3",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -66,4 +66,9 @@ public class ScExtract implements SystemCall {
             memory.set(2, currentStack.getCount());
         }
     }
+
+    @Override
+    public int ticksBlocking() {
+        return 1;
+    }
 }

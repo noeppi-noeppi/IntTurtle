@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "ici",
+    "bbb"
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "c": {
+      "item": "intturtle:basic_circuit"
+    },
+    "b": {
+      "item": "minecraft:polished_andesite"
+    }
+  },
+  "result": {
+    "item": "intturtle:basic_turtle"
+  }
+}

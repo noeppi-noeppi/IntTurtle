@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " r ",
+    "tqt",
+    "ggg"
+  ],
+  "key": {
+    "r": {
+      "tag": "forge:dusts/redstone"
+    },
+    "t": {
+      "item": "minecraft:redstone_torch"
+    },
+    "q": {
+      "tag": "forge:gems/quartz"
+    },
+    "g": {
+      "tag": "forge:ingots/gold"
+    }
+  },
+  "result": {
+    "item": "intturtle:basic_circuit"
+  }
+}

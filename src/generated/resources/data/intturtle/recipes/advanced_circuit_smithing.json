@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "intturtle:basic_circuit"
+  },
+  "addition": {
+    "tag": "forge:ingots/netherite"
+  },
+  "result": {
+    "item": "intturtle:advanced_circuit"
+  }
+}

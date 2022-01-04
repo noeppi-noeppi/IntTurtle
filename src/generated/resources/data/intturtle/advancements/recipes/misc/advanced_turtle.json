@@ -1,0 +1,58 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "intturtle:advanced_turtle"
+    ]
+  },
+  "criteria": {
+    "criterion0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/iron"
+          }
+        ]
+      }
+    },
+    "criterion1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "intturtle:advanced_circuit"
+            ]
+          }
+        ]
+      }
+    },
+    "criterion2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:polished_blackstone"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "intturtle:advanced_turtle"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "criterion0",
+      "criterion1",
+      "criterion2",
+      "has_the_recipe"
+    ]
+  ]
+}

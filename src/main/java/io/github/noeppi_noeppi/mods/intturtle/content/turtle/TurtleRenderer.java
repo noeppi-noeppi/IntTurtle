@@ -3,7 +3,6 @@ package io.github.noeppi_noeppi.mods.intturtle.content.turtle;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
-import io.github.noeppi_noeppi.libx.annotation.model.Model;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.movement.ScMove;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.movement.ScTurn;
 import io.github.noeppi_noeppi.mods.intturtle.util.MovingDirection;
@@ -23,9 +22,6 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import javax.annotation.Nonnull;
 
 public class TurtleRenderer implements BlockEntityRenderer<Turtle> {
-
-    @Model("block/test_turtle")
-    public static BakedModel model = null;
     
     @Override
     public void render(@Nonnull Turtle turtle, float partialTicks, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource buffer, int light, int overlay) {
@@ -45,6 +41,8 @@ public class TurtleRenderer implements BlockEntityRenderer<Turtle> {
             poseStack.translate(0, value * turtle.getMoveDir().factorY, value * turtle.getMoveDir().factorZ);
         }
 
+        BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(turtle.getBlockState());
+        
         VertexConsumer vertex = buffer.getBuffer(RenderType.solid());
         Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
                 poseStack.last(), vertex, turtle.getBlockState(), model,

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "intturtle:block/basic_turtle"
+    }
+  }
+}

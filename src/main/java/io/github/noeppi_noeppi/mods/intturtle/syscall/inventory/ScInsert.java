@@ -51,4 +51,9 @@ public class ScInsert implements SystemCall {
             memory.set(2, remainder.getCount());
         }
     }
+
+    @Override
+    public int ticksBlocking() {
+        return 1;
+    }
 }

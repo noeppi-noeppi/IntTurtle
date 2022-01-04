@@ -16,4 +16,9 @@ public class ScLoadInventory implements SystemCall {
         MovingDirection dir = MovingDirection.targetFromMemory(memory.get(0));
         dot.set(new DynamicItemHandler(turtle.targetPos(dir), turtle.facing().getOpposite()));
     }
+
+    @Override
+    public int ticksBlocking() {
+        return 1;
+    }
 }

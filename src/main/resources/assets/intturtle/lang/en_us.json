@@ -1,5 +1,9 @@
 {
   "item.intturtle.source_code": "Source Code",
+  "item.intturtle.basic_circuit": "Basic Circuit",
+  "item.intturtle.advanced_circuit": "Advanced Circuit",
+  "block.intturtle.basic_turtle": "Basic Turtle",
+  "block.intturtle.advanced_turtle": "Advanced Turtle",
   
   "intturtle.source_code.empty": "Empty Memory",
   "intturtle.source_code.load_clipboard": "Load from Clipboard",

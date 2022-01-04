@@ -6,9 +6,11 @@ import io.github.noeppi_noeppi.libx.inventory.BaseItemStackHandler;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.movement.ScMove;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.movement.ScTurn;
 import io.github.noeppi_noeppi.mods.intturtle.util.MovingDirection;
+import io.github.noeppi_noeppi.mods.intturtle.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -17,6 +19,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Turtle extends BlockEntityBase implements TickableBlock {
     
@@ -43,6 +49,9 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
     @Nullable
     private BlockPos scheduledMove = null;
     
+    private final EnumMap<Direction, Integer> redstonePower = new EnumMap<>(Arrays.stream(Direction.values()).collect(Collectors.toMap(Function.identity(), dir -> 0)));
+    private int comparatorPower = 0;
+    
     public Turtle(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         int instructionsPerTick = 1;
@@ -53,6 +62,10 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
     public void startProgram(long[] memory) {
         this.status = null;
         this.executor.start(memory);
+        for (Direction dir : Direction.values()) {
+            this.setEmittedRedstonePower(dir, 0);
+        }
+        this.setComparatorOutput(0);
         this.setChanged();
     }
     
@@ -199,6 +212,10 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
         super.saveAdditional(nbt);
         nbt.put("Executor", this.executor.save());
         nbt.putString("Status", this.status == null ? "" : this.status);
+        for (Direction dir : Direction.values()) {
+            nbt.putInt("Redstone" + Util.capitalize(dir.getName()), this.redstonePower.get(dir));
+        }
+        nbt.putInt("RedstoneComparator", this.comparatorPower);
         this.addClientValues(nbt);
     }
 
@@ -208,6 +225,10 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
         this.executor.load(nbt.getCompound("Executor"));
         String statusStr = nbt.getString("Status");
         this.status = statusStr.isEmpty() ? null : this.status;
+        for (Direction dir : Direction.values()) {
+            this.redstonePower.put(dir, nbt.getInt("Redstone" + Util.capitalize(dir.getName())));
+        }
+        this.comparatorPower = nbt.getInt("RedstoneComparator");
         this.loadClientValues(nbt);
     }
 
@@ -255,5 +276,29 @@ public class Turtle extends BlockEntityBase implements TickableBlock {
 
     public int getMovingTicks() {
         return movingTicks;
+    }
+    
+    public int getEmittedRedstonePower(Direction dir) {
+        return this.redstonePower.get(dir);
+    }
+    
+    public int getComparatorOutput() {
+        return this.comparatorPower;
+    }
+
+    public void setEmittedRedstonePower(Direction dir, int power) {
+        this.redstonePower.put(dir, Mth.clamp(power, 0, 15));
+        this.setChanged();
+        if (this.level != null) {
+            level.updateNeighborsAt(this.worldPosition, this.level.getBlockState(this.worldPosition).getBlock());
+        }
+    }
+
+    public void setComparatorOutput(int power) {
+        this.comparatorPower = Mth.clamp(power, 0, 15);
+        this.setChanged();
+        if (this.level != null) {
+            level.updateNeighbourForOutputSignal(this.worldPosition, this.level.getBlockState(this.worldPosition).getBlock());
+        }
     }
 }

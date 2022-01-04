@@ -17,6 +17,10 @@ import io.github.noeppi_noeppi.mods.intturtle.syscall.inventory.*;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.movement.ScMove;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.movement.ScTurn;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.nbt.*;
+import io.github.noeppi_noeppi.mods.intturtle.syscall.redstone.ScGetPower;
+import io.github.noeppi_noeppi.mods.intturtle.syscall.redstone.ScIsPowered;
+import io.github.noeppi_noeppi.mods.intturtle.syscall.redstone.ScSetAnalogPower;
+import io.github.noeppi_noeppi.mods.intturtle.syscall.redstone.ScSetPower;
 import io.github.noeppi_noeppi.mods.intturtle.util.MovingDirection;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.fml.common.Mod;
@@ -114,6 +118,12 @@ public final class IntTurtle extends ModXRegistration {
         SystemCalls.register(405, new ScTagElementType());
         SystemCalls.register(406, new ScTagByKey());
         SystemCalls.register(407, new ScTagByIndex());
+        
+        // Redstone
+        SystemCalls.register(500, new ScIsPowered());
+        SystemCalls.register(501, new ScGetPower());
+        SystemCalls.register(502, new ScSetPower());
+        SystemCalls.register(503, new ScSetAnalogPower());
     }
 
     @Override

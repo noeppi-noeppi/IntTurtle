@@ -7,6 +7,7 @@ import io.github.noeppi_noeppi.mods.intturtle.content.source.SourceCodeItem;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -14,6 +15,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -80,5 +82,31 @@ public class TurtleBlock extends BlockBE<Turtle> {
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+    
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean hasAnalogOutputSignal(@Nonnull BlockState state) {
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getAnalogOutputSignal(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos) {
+        BlockEntity be = level.getBlockEntity(pos);
+        return be instanceof Turtle turtle ? turtle.getComparatorOutput() : 0;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isSignalSource(@Nonnull BlockState state) {
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getSignal(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull Direction direction) {
+        BlockEntity be = level.getBlockEntity(pos);
+        return be instanceof Turtle turtle ? turtle.getEmittedRedstonePower(direction) : 0;
     }
 }

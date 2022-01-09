@@ -17,4 +17,9 @@ public class ScSetPower implements SystemCall {
         int power = (int) memory.get(1);
         turtle.setEmittedRedstonePower(dir, power);
     }
+
+    @Override
+    public int ticksBlocking() {
+        return 1;
+    }
 }

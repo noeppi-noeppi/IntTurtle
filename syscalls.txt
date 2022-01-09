@@ -1,0 +1,86 @@
+IntTurtle System Calls
+
+Adds opcode 10 which takes one argument. This is the system call id and will select a system call from below.
+
+To handle more advanced objects like strings, NBT or inventories, IntTurtle has a system called dynamic object table or dot for short.
+There are three built in registers for dot-objects named X, A and B.
+Most system calls expect values in the X register, some also in A or B.
+To store more dot-objects, a dot object can be allocated using one of the allocate system calls that copy a value from one of the registers into an internal table and return an id to access that object later.
+
+
+Data types as ints:
+
+Rotations: S=0, W=1, N=2, E=3
+Directions: Forward=0, Up=1, Down=2
+Dimension Ids: Overworld=0, Nether=-1, End=1, Other Modded=2
+NBT Tag Type: Id column in https://minecraft.fandom.com/wiki/NBT_format#TAG_definition
+
+
+String formats
+
+System calls to load and store dot strings from/to intcode memory can work in two string modes.
+Null terminated mode stores all the unicode core points as ints and then a 0 to mark end of the string
+Length prepended mode stores the length of the string followed by all the unicode core points as ints
+
+
+Slots
+
+Each turtle has two slots for items: Left and right.
+
+System calls (A, B and X mean the dot registers, numbers are memory addresses)
+
+  0  Set version string to X, Version string length to 0, 1 to major CraftCode version, 2 to minor CraftCode version and 3 to IntTurtle SystemCall API version
+  1  Set 0 to current rotation, 1, 2, 3 to current x, y and z coordinates.
+  2  Set 0 to dimension id and X to dimension resource location
+  
+100  Set A to X
+101  Set B to X
+102  Set X to A
+103  Set X to B
+104  Swap A and B
+105  Allocate dot from X and store id in 0
+106  Allocate dot from A and store id in 1
+107  Allocate dot from B and store id in 2
+108  Load dot from id in 0 and store in X
+109  Load dot from id in 1 and store in A
+110  Load dot from id in 2 and store in B
+111  Free dot by id in 0
+112  Load string from X into memory starting at value stored in 0, Null terminated mode
+113  Load string from X into memory starting at value stored in 0, Length prepended mode
+114  Store string from memory starting at value stored in 0 into X, Null terminated mode
+115  Store string from memory starting at value stored in 0 into X, Length prepended mode
+116  Compare string in X with string stored at value stored in 0, Set 0 to true (1) if equal, false (0) if not, Null terminated mode
+117  Compare string in X with string stored at value stored in 0, Set 0 to true (1) if equal, false (0) if not, Length prepended mode
+118  Compare string in A with string stored at value stored in 1, Set 1 to true (1) if equal, false (0) if not, Null terminated mode
+119  Compare string in A with string stored at value stored in 1, Set 1 to true (1) if equal, false (0) if not, Length prepended mode
+120  Compare string in B with string stored at value stored in 2, Set 2 to true (1) if equal, false (0) if not, Null terminated mode
+121  Compare string in B with string stored at value stored in 2, Set 2 to true (1) if equal, false (0) if not, Length prepended mode
+122  Parse string in X as a resource location. Store namespace in A and path in B. If not a valid resource location, Use minecraft:missigno
+
+200  Move forward
+201  Move up
+202  Move down
+203  Turn left
+204  Turn right
+
+300  Swap stacks in left and right slot
+301  Merge stack from left slot into right slot. Set 1 to count of left stack, 2 to count of right stack.
+302  Load direction from 0 and store block inventory in X. The inventory can only be accessed if the turtle faces it like it does when it was wrapped.
+303  Extract from inventory stored in X into right slot. Use inventory slot from 1 and max amount from 2. Store the amount that was extracted in 1 and the stack size of left stack in 2. Slot -1 means any slot.
+304  Insert from right slot into inventory from X. Use inventory slot from 1 and max amount from 2. Store the amount that was inserted in 1 and the stack size of left stack in 2. Slot -1 means any slot.
+305  Get item info from item. Right slot if 0 is false (0), left slot if not. Set 0 to the item registry id, 1 to the count, 2 to the max stack size, 3 whether the stack has a NBT tag.
+306  Store nbt from stack in X. Right slot if 0 is false (0), left slot if not. Set 1 to true if the stack has a tag, 0 if not.
+
+400  Store tag type of NBT from X in 0
+401  Parse NBT path from B and apply it to NBT in A. Set 0 to the amount of matching tags.
+402  Parse NBT path from B and apply it to NBT in A. Load index from 0 and store matching NBT element in X. Set 0 to true (1) if successful, false (0) if not.
+403  Convert NBT from X to string. A string nbt is converted to its value, each other type to its string representation.
+404  Convert NBT from X to int. For numeric tags, it is the value truncated. For collection tags it is the size. 0 for each other tag type.
+405  Set 0 to element type of collection NBT in X. If NBT in X is not a collection tag, Set 0 to TAG_END
+406  Get element by string key in A from NBT in X. Store it in X. Set 0 to true (1) if successful, false (0) if not.
+406  Get element by int key in 1 from NBT in X. Store it in X. Set 0 to true (1) if successful, false (0) if not.
+
+500  If the turtle has any redstone signal, set 1 to true (1). If not, set it to false (0)
+501  Set 1 to redstone power received from direction stored in 0.
+502  Emit redstone power stored in 1 at direction stored in 0.
+503  Emit redstone power stored in 2 through comparators.

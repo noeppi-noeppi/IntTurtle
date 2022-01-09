@@ -14,4 +14,9 @@ public class ScSetAnalogPower implements SystemCall {
         int power = (int) memory.get(2);
         turtle.setComparatorOutput(power);
     }
+
+    @Override
+    public int ticksBlocking() {
+        return 1;
+    }
 }

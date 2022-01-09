@@ -1,4 +1,4 @@
-package io.github.noeppi_noeppi.intturtle.engine;
+package io.github.noeppi_noeppi.mods.intturtle.engine;
 
 import com.mojang.serialization.Codec;
 

@@ -1,12 +1,12 @@
 package io.github.noeppi_noeppi.mods.intturtle.content.turtle;
 
 import com.mojang.serialization.Codec;
-import io.github.noeppi_noeppi.intturtle.engine.CraftCodeInterface;
-import io.github.noeppi_noeppi.intturtle.engine.CraftCodeVM;
-import io.github.noeppi_noeppi.intturtle.engine.IntCodeException;
-import io.github.noeppi_noeppi.intturtle.engine.Memory;
 import io.github.noeppi_noeppi.libx.util.ServerMessages;
 import io.github.noeppi_noeppi.mods.intturtle.dot.DynamicObjects;
+import io.github.noeppi_noeppi.mods.intturtle.engine.CraftCodeInterface;
+import io.github.noeppi_noeppi.mods.intturtle.engine.CraftCodeVM;
+import io.github.noeppi_noeppi.mods.intturtle.engine.IntCodeException;
+import io.github.noeppi_noeppi.mods.intturtle.engine.Memory;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.SystemCall;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.SystemCalls;
 import net.minecraft.nbt.CompoundTag;

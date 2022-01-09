@@ -1,10 +1,10 @@
 package io.github.noeppi_noeppi.mods.intturtle.syscall.inventory;
 
-import io.github.noeppi_noeppi.intturtle.engine.IntCodeException;
-import io.github.noeppi_noeppi.intturtle.engine.Memory;
 import io.github.noeppi_noeppi.mods.intturtle.content.turtle.Turtle;
 import io.github.noeppi_noeppi.mods.intturtle.dot.DynamicObjects;
 import io.github.noeppi_noeppi.mods.intturtle.dot.objects.DynamicItemHandler;
+import io.github.noeppi_noeppi.mods.intturtle.engine.IntCodeException;
+import io.github.noeppi_noeppi.mods.intturtle.engine.Memory;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.SystemCall;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;

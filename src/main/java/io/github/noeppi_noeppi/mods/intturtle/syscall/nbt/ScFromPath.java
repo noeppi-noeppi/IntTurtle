@@ -2,12 +2,12 @@ package io.github.noeppi_noeppi.mods.intturtle.syscall.nbt;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import io.github.noeppi_noeppi.intturtle.engine.IntCodeException;
-import io.github.noeppi_noeppi.intturtle.engine.Memory;
 import io.github.noeppi_noeppi.mods.intturtle.content.turtle.Turtle;
 import io.github.noeppi_noeppi.mods.intturtle.dot.DynamicObject;
 import io.github.noeppi_noeppi.mods.intturtle.dot.DynamicObjects;
 import io.github.noeppi_noeppi.mods.intturtle.dot.objects.DynamicNBT;
+import io.github.noeppi_noeppi.mods.intturtle.engine.IntCodeException;
+import io.github.noeppi_noeppi.mods.intturtle.engine.Memory;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.SystemCall;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.nbt.CompoundTag;

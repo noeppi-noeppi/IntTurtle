@@ -1,9 +1,9 @@
 package io.github.noeppi_noeppi.mods.intturtle.syscall.redstone;
 
-import io.github.noeppi_noeppi.intturtle.engine.IntCodeException;
-import io.github.noeppi_noeppi.intturtle.engine.Memory;
 import io.github.noeppi_noeppi.mods.intturtle.content.turtle.Turtle;
 import io.github.noeppi_noeppi.mods.intturtle.dot.DynamicObjects;
+import io.github.noeppi_noeppi.mods.intturtle.engine.IntCodeException;
+import io.github.noeppi_noeppi.mods.intturtle.engine.Memory;
 import io.github.noeppi_noeppi.mods.intturtle.syscall.SystemCall;
 import io.github.noeppi_noeppi.mods.intturtle.util.IntCodeEnums;
 import net.minecraft.core.Direction;

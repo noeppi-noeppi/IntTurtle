@@ -1,6 +1,6 @@
 package io.github.noeppi_noeppi.mods.intturtle.syscall;
 
-import io.github.noeppi_noeppi.intturtle.engine.IntCodeException;
+import io.github.noeppi_noeppi.mods.intturtle.engine.IntCodeException;
 
 import java.util.HashMap;
 import java.util.Map;
